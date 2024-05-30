@@ -1,0 +1,128 @@
+Here's the procedure to set up Nagios monitoring on Ubuntu, following your steps:
+
+### Step 1: Check LSB Release
+
+```bash
+lsb_release -a
+```
+
+### Step 2: Install Apache
+
+```bash
+sudo apt install apache2 -y
+```
+
+### Step 3: Enable the Apache service
+
+```bash
+sudo systemctl start apache2 && sudo systemctl enable apache2
+```
+
+### Step 4: Install Nagios
+
+```bash
+sudo apt install nagios4 nagios-plugins -y
+```
+
+### Step 5: Postfix Configuration
+
+Postfix is typically configured during Nagios installation. If you need to configure it manually:
+
+```bash
+sudo dpkg-reconfigure postfix
+```
+
+### Step 6: Enable Modules and Restart Apache
+
+```bash
+sudo a2enmod rewrite cgi
+sudo systemctl restart apache2
+```
+
+### Step 7: Enable Nagios Service
+
+```bash
+sudo systemctl start nagios4
+sudo systemctl enable nagios4
+```
+
+### Step 8: Access Nagios Web Interface
+
+Open a web browser and enter the following URL:
+
+```
+http://192.168.6.133/nagios4
+```
+
+Replace `192.168.6.133` with the actual IP address of your Nagios server.
+
+This should take you to the Nagios web interface where you can log in and start configuring your monitoring setup.
+
+Ensure you have the necessary permissions to execute these commands, especially when restarting services or configuring Apache.
+
+To perform operations in Nagios, you typically interact with the Nagios Core service using the command-line interface (CLI). Here are some common commands:
+
+### 1. Restart Nagios Service:
+
+```bash
+sudo systemctl restart nagios
+```
+
+### 2. Check Nagios Configuration for Errors:
+
+```bash
+sudo nagios -v /path/to/nagios.cfg
+```
+
+### 3. Enable/Disable Service or Host Checks:
+
+```bash
+sudo /usr/local/nagios/bin/nagios -d /path/to/nagios.cfg "[$HOSTNAME]$SERVICENAME"
+```
+
+### 4. Acknowledge a Service Problem:
+
+```bash
+sudo /usr/local/nagios/libexec/nagioscmd acknowledge_problem "[$HOSTNAME]$SERVICENAME"
+```
+
+### 5. Schedule a Downtime for a Service or Host:
+
+```bash
+sudo /usr/local/nagios/bin/nagios -d /path/to/nagios.cfg "[$HOSTNAME]$SERVICENAME" start_time end_time comment
+```
+
+### 6. View Status of Nagios Service:
+
+```bash
+sudo systemctl status nagios
+```
+
+### 7. Restart Apache (if using Nagios Core with Apache web server):
+
+```bash
+sudo systemctl restart apache2
+```
+
+### 8. View Nagios Log Files:
+
+```bash
+sudo tail -f /var/log/nagios/nagios.log
+```
+
+### 9. Enable/Disable Notifications for a Service or Host:
+
+```bash
+sudo /usr/local/nagios/bin/nagios -d /path/to/nagios.cfg "[$HOSTNAME]$SERVICENAME" enable_notifications
+sudo /usr/local/nagios/bin/nagios -d /path/to/nagios.cfg "[$HOSTNAME]$SERVICENAME" disable_notifications
+```
+
+### 10. Modify Object Definitions (e.g., hosts, services) in Configuration Files:
+
+Edit the appropriate configuration files, typically located in `/usr/local/nagios/etc/objects/`.
+
+### Note:
+- Replace placeholders like `$HOSTNAME` and `$SERVICENAME` with actual host and service names.
+- Paths may vary depending on your Nagios installation and configuration.
+
+Always ensure you have the necessary permissions to execute these commands, especially when making changes to Nagios configuration or restarting services.
