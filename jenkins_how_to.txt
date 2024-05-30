@@ -1,0 +1,31 @@
+# Step 1: Update Package Repository
+sudo apt update
+
+# Step 2: Install Java
+sudo apt install fontconfig openjdk-17-jre
+java -version
+
+# Step 3: Add Jenkins Repository Key
+sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
+https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+
+# Step 4: Add Jenkins Repository
+echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list
+
+# Step 5: Install Jenkins
+sudo apt-get update
+sudo apt-get install jenkins
+
+# Step 6: Check Jenkins Service Status
+sudo systemctl enable jenkins
+sudo systemctl start jenkins
+sudo systemctl status jenkins
+
+# Step 7: Configure Jenkins
+# Assuming the configuration steps involve:
+# 1. Accessing the Jenkins dashboard
+# 2. Creating a new item (job) in Jenkins
+# 3. Specifying the GitHub repository URL
+# 4. Saving the configuration
+# 5. Triggering a build
+# 6. Viewing the console output
