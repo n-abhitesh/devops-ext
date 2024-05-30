@@ -1,0 +1,106 @@
+To set up Docker and Docker Desktop on Ubuntu and create containers for different operating systems, follow these steps:
+
+### Installing Docker:
+
+1. Add Docker's official GPG key:
+   ```bash
+   sudo apt-get update
+   sudo apt-get install ca-certificates curl sudo
+   sudo install -m 0755 -d /etc/apt/keyrings
+   sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+   sudo chmod a+r /etc/apt/keyrings/docker.asc
+   ```
+
+2. Add the repository to Apt sources:
+   ```bash
+   echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+   ```
+
+3. Run the update command:
+   ```bash
+   sudo apt-get update
+   ```
+
+4. Install Docker:
+   ```bash
+   sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+   ```
+
+5. If you encounter broken packages error, fix it using:
+   ```bash
+   sudo apt --fix-broken install
+   ```
+
+6. Run Docker:
+   ```bash
+   sudo docker run hello-world
+   ```
+
+### Installing Docker Desktop:
+
+1. Download Docker Desktop from the official website.
+
+2. Install Docker Desktop:
+   ```bash
+   sudo apt-get install /path/to/docker-desktop-4.29.0-amd64.deb
+   ```
+
+3. Start Docker Desktop:
+   ```bash
+   systemctl --user start docker-desktop
+   ```
+
+### Creating Containers of Different OS and Running Commands:
+
+#### Container of Ubuntu:
+
+1. Pull Docker image:
+   ```bash
+   sudo docker pull ubuntu
+   ```
+
+2. Run container:
+   ```bash
+   sudo docker run -it --name my-ubuntu-container ubuntu
+   ```
+
+   - `-it`: Interactive terminal session.
+   - `--name my-ubuntu-container`: Assigns a name to the container.
+   - `ubuntu`: Specifies the Docker image used.
+
+3. Execute commands inside Ubuntu container:
+   ```bash
+   ls
+   nano  # If nano is not installed, you can install it using apt-get install nano
+   mkdir mydirectory
+   cd mydirectory
+   touch myfile.txt
+   cat myfile.txt
+   ls
+   ```
+
+4. Exit container using `exit` command.
+
+5. Stop and remove container:
+   ```bash
+   sudo docker stop my-ubuntu-container
+   sudo docker rm my-ubuntu-container
+   ```
+
+#### Container of Alpine:
+
+1. Pull Docker image:
+   ```bash
+   sudo docker pull alpine
+   ```
+
+2. Run container:
+   ```bash
+   sudo docker run -it --name my-alpine-container alpine
+   ```
+
+   (Continue with similar steps as for Ubuntu container)
+
+References:
+- [Docker Desktop Installation Guide for Ubuntu](https://docs.docker.com/desktop/install/ubuntu/)
+- [Docker Engine Installation Guide for Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
