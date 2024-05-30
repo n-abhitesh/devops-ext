@@ -1,0 +1,118 @@
+Here's the procedure to install and configure Puppet on both the master and agent nodes:
+
+### Step 1: Install Puppet on Both Master and Agent
+
+#### Puppet Master Installation:
+
+```bash
+sudo apt update
+sudo apt install -y wget
+wget https://apt.puppetlabs.com/puppet7-release-focal.deb
+sudo dpkg -i puppet7-release-focal.deb
+sudo apt update
+sudo apt install -y puppetserver
+```
+
+#### Puppet Agent Installation:
+
+```bash
+sudo apt update
+sudo apt install -y wget
+wget https://apt.puppetlabs.com/puppet7-release-focal.deb
+sudo dpkg -i puppet7-release-focal.deb
+sudo apt update
+sudo apt install -y puppet-agent
+```
+
+### Step 2: Configure Puppet Master
+
+1. Edit puppetserver settings in `/etc/puppetlabs/puppet/puppet.conf`:
+
+```
+[main]
+certname = puppetmaster.example.com
+server = puppetmaster.example.com
+environment = production
+runinterval = 1h
+
+[master]
+dns_alt_names = puppet, puppetmaster, puppetmaster.example.com
+```
+
+2. Start and enable the Puppet master service:
+
+```bash
+sudo systemctl start puppetserver
+sudo systemctl enable puppetserver
+```
+
+### Step 3: Configure Puppet Agent
+
+1. Edit Puppet agent settings in `/etc/puppetlabs/puppet/puppet.conf`:
+
+```
+[main]
+certname = puppetagent.example.com
+server = puppetmaster.example.com
+environment = production
+```
+
+2. Start and enable the Puppet agent service:
+
+```bash
+sudo systemctl start puppet
+sudo systemctl enable puppet
+```
+
+### Step 4: Establish SSL Certificate
+
+1. On the Puppet Agent, initiate a certificate signing request (CSR):
+
+```bash
+sudo puppet agent --test --waitforcert 60
+```
+
+2. On the Puppet Master, list and sign the certificate request:
+
+```bash
+sudo puppetserver ca list --all
+sudo puppetserver ca sign --certname puppetagent.example.com
+```
+
+3. Verify the connection on the Puppet agent:
+
+```bash
+sudo puppet agent --test
+```
+
+### Step 5: Verify Communication
+
+1. On the Puppet Master, verify the agent node:
+
+```bash
+sudo puppet node status puppetagent.example.com
+```
+
+2. Check the reports on the Puppet Master to ensure that the agent is reporting properly.
+
+### Step 6: Manage Puppet Modules
+
+1. Create a simple manifest in `/etc/puppetlabs/code/environments/production/manifests/site.pp`:
+
+```puppet
+node 'puppetagent.example.com' {
+    file { '/tmp/hello.txt':
+        ensure => 'present',
+        content => 'Hello, Puppet!',
+    }
+}
+```
+
+2. Run the Puppet agent to apply the configuration:
+
+```bash
+sudo puppet agent --test
+```
+
+References:
+- [CloudBees - Install and Configure Puppet Agent](https://www.cloudbees.com/blog/install-and-configure-puppet-agent)
