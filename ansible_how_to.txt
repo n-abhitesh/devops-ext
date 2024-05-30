@@ -1,0 +1,70 @@
+To set up Ansible, configure it to install Docker and deploy an application within a Docker container, follow these steps:
+
+### 1. Install Dependencies:
+
+```bash
+sudo apt update
+sudo apt-add-repository --yes ppa:ansible/ansible
+```
+
+### 2. Install Ansible:
+
+```bash
+sudo apt install -y ansible
+```
+
+### 3. Verify Ansible Installation:
+
+If you encounter an error related to locale encoding, follow these steps to resolve it:
+
+#### Handling the Error:
+
+1. Open the `/etc/default/locale` file for editing:
+
+```bash
+sudo nano /etc/default/locale
+```
+
+2. Update the file to set the locale to UTF-8:
+
+```bash
+LANG="en_US.UTF-8"
+LC_ALL="en_US.UTF-8"
+```
+
+3. Save the file and exit the editor.
+
+4. Restart your system or log out and log back in to apply the changes.
+
+5. Run the version command again:
+
+```bash
+ansible --version
+```
+
+### 4. Make Changes in the Ansible Configuration File:
+
+Edit the Ansible configuration file to set `host_key_checking` to `False`.
+
+### 5. Create an Inventory File:
+
+Create an inventory file mentioning the private IP of the worker node, machine name, and private key.
+
+### 6. Create an Ansible Playbook:
+
+Create an Ansible playbook that will install Docker on the worker node and run a nginx container on port 807.
+
+### 7. Running the Ansible Playbook:
+
+Use the following command to run the Ansible playbook:
+
+```bash
+ansible-playbook your_playbook.yml -i your_inventory_file
+```
+
+### 8. Connect to the Public IP of the Worker Node:
+
+After running the playbook successfully, connect to the public IP of the worker node with port 80 on the browser to access the deployed application.
+
+References:
+- [Automating Docker Deployments with Ansible](https://www.geeksforgeeks.org/automating-docker-deployments-with-ansible/)
